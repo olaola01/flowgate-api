@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Flowgate\FlowgateLogger;
 use App\Services\Flowgate\GatewayTelemetryService;
 use App\Services\Flowgate\RateLimiterService;
 use Closure;
@@ -18,6 +19,7 @@ class EnforceFlowgateRateLimit
     public function __construct(
         private readonly RateLimiterService $rateLimiterService,
         private readonly GatewayTelemetryService $telemetryService,
+        private readonly FlowgateLogger $logger,
     ) {}
 
     /**
@@ -31,6 +33,11 @@ class EnforceFlowgateRateLimit
 
         if (! $result['allowed']) {
             $this->telemetryService->logBlocked($request, $apiKey, 429);
+            $this->logger->warning('gateway.rate_limit.blocked', [
+                'api_key_id' => $apiKey->id,
+                'limit' => $result['limit'],
+                'remaining' => $result['remaining'],
+            ]);
 
             return response()->json([
                 'message' => 'Rate limit exceeded',

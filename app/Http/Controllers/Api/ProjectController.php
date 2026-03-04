@@ -20,6 +20,7 @@ class ProjectController extends Controller
      * @group Projects
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
      *
      * @queryParam page integer Page number. Example: 1
      * @queryParam per_page integer Number of records per page (max 100). Example: 20
@@ -35,6 +36,8 @@ class ProjectController extends Controller
      * @group Projects
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
+     * @header Idempotency-Key string Optional idempotency key for safe retries.
      *
      * @bodyParam name string required Human-readable project name. Example: Primary API
      * @bodyParam slug string required URL-safe project identifier. Example: primary-api

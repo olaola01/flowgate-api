@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Cache;
 class RateLimiterService
 {
     /**
+     * Create a new service instance.
+     */
+    public function __construct(private readonly FlowgateLogger $logger) {}
+
+    /**
      * Evaluate and increment counters for the incoming request.
      *
      * @return array{allowed: bool, limit: int, remaining: int, reset_at: int}
@@ -33,6 +38,14 @@ class RateLimiterService
 
         $resetAt = ($window + 1) * $windowSeconds;
         $remaining = max(0, $limit - $current);
+
+        $this->logger->info('gateway.rate_limit.evaluated', [
+            'api_key_id' => $apiKey->id,
+            'limit' => $limit,
+            'current' => $current,
+            'remaining' => $remaining,
+            'allowed' => $current <= $limit,
+        ]);
 
         return [
             'allowed' => $current <= $limit,

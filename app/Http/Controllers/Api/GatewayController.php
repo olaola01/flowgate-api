@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Flowgate\ApiKey;
 use App\Models\Flowgate\Project;
+use App\Services\Flowgate\FlowgateLogger;
 use App\Services\Flowgate\GatewayProxyService;
 use App\Services\Flowgate\GatewayTelemetryService;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ class GatewayController extends Controller
     public function __construct(
         private readonly GatewayTelemetryService $telemetry,
         private readonly GatewayProxyService $proxyService,
+        private readonly FlowgateLogger $logger,
     ) {}
 
     /**
@@ -30,6 +32,7 @@ class GatewayController extends Controller
      * @group Gateway
      *
      * @header X-Api-Key string required API key used for gateway authentication.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
      *
      * @urlParam project string required Project slug. Example: primary-api
      * @urlParam path string Optional upstream path after project slug. Example: customers
@@ -45,6 +48,10 @@ class GatewayController extends Controller
             $proxyResponse = $this->proxyService->forward($project, $request, $path);
         } catch (Throwable) {
             $this->telemetry->logAllowed($request, $project, $apiKey, 502, 0, 0);
+            $this->logger->error('gateway.proxy.failed', [
+                'project_id' => $project->id,
+                'api_key_id' => $apiKey->id,
+            ]);
 
             return response()->json(['message' => 'Upstream request failed'], 502);
         }
@@ -66,6 +73,13 @@ class GatewayController extends Controller
         foreach ($proxyResponse->headers as $headerName => $headerValue) {
             $response->headers->set($headerName, $headerValue);
         }
+
+        $this->logger->info('gateway.proxy.succeeded', [
+            'project_id' => $project->id,
+            'api_key_id' => $apiKey->id,
+            'status_code' => $proxyResponse->status,
+            'latency_ms' => $latencyMs,
+        ]);
 
         return $response;
     }
