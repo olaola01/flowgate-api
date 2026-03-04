@@ -28,6 +28,7 @@ class ApiKeyController extends Controller
      * @group API Keys
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
      *
      * @queryParam project_id integer Filter keys by project ID. Example: 1
      * @queryParam per_page integer Number of records per page (max 100). Example: 20
@@ -52,6 +53,8 @@ class ApiKeyController extends Controller
      * @group API Keys
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
+     * @header Idempotency-Key string Optional idempotency key for safe retries.
      *
      * @bodyParam project_id integer required Owning project ID. Example: 1
      * @bodyParam rate_limit_policy_id integer Optional rate limit policy ID. Example: 1
@@ -83,6 +86,8 @@ class ApiKeyController extends Controller
      * @group API Keys
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
+     * @header Idempotency-Key string Optional idempotency key for safe retries.
      *
      * @urlParam apiKey integer required API key ID. Example: 1
      */
@@ -103,6 +108,8 @@ class ApiKeyController extends Controller
      * @group API Keys
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
+     * @header Idempotency-Key string Optional idempotency key for safe retries.
      *
      * @urlParam apiKey integer required API key ID. Example: 1
      */

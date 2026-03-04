@@ -28,6 +28,7 @@ class AnalyticsController extends Controller
      * @group Analytics
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
      *
      * @queryParam from datetime Inclusive window start. Example: 2026-03-03 00:00:00
      * @queryParam to datetime Inclusive window end. Example: 2026-03-04 00:00:00
@@ -46,6 +47,7 @@ class AnalyticsController extends Controller
      * @group Analytics
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
      *
      * @queryParam from datetime Inclusive window start. Example: 2026-03-03 00:00:00
      * @queryParam to datetime Inclusive window end. Example: 2026-03-04 00:00:00
@@ -66,6 +68,7 @@ class AnalyticsController extends Controller
      * @group Analytics
      *
      * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     * @header X-Request-Id string Optional correlation ID. If omitted, one is generated.
      *
      * @queryParam from datetime Inclusive window start. Example: 2026-03-03 00:00:00
      * @queryParam to datetime Inclusive window end. Example: 2026-03-04 00:00:00

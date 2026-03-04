@@ -7,6 +7,7 @@ Flowgate is built around a thin API gateway path and asynchronous analytics proc
 ```mermaid
 flowchart LR
     Client["Client SDK"] -->|X-Api-Key Request| Gateway["Laravel Gateway Route"]
+    Client -->|Optional X-Request-Id| Gateway
     Gateway --> Auth["API Key Middleware"]
     Auth --> Limit["Rate Limit Middleware Redis"]
     Limit -->|Allowed| Proxy["Saloon Upstream Proxy"]
@@ -29,12 +30,14 @@ flowchart LR
     AnalyticsSvc --> RedisCache[(Redis cache)]
     AnalyticsSvc --> AdminAPI["Analytics Endpoints"]
 
-    AdminUser["Admin Client"] -->|X-Admin-Token| AdminAPI
+    AdminUser["Admin Client"] -->|X-Admin-Token and optional Idempotency-Key| AdminAPI
     AdminUser -->|X-Admin-Token| MgmtAPI["Projects and Keys Endpoints"]
     MgmtAPI --> MySQL[(MySQL/PostgreSQL)]
     RawLogs --> MySQL
     Hourly --> MySQL
     Daily --> MySQL
+    Gateway --> LogStream["Structured JSON Logs"]
+    AdminAPI --> LogStream
 ```
 
 ## Request Path

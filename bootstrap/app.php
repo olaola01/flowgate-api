@@ -30,6 +30,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'flowgate.admin' => \App\Http\Middleware\EnsureFlowgateAdmin::class,
             'flowgate.api_key' => \App\Http\Middleware\EnsureGatewayApiKey::class,
             'flowgate.rate_limit' => \App\Http\Middleware\EnforceFlowgateRateLimit::class,
+            'flowgate.correlation' => \App\Http\Middleware\EnsureRequestCorrelationId::class,
+            'flowgate.idempotency' => \App\Http\Middleware\HandleIdempotencyKey::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

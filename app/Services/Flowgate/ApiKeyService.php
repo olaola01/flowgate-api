@@ -13,6 +13,11 @@ use Illuminate\Support\Str;
 class ApiKeyService
 {
     /**
+     * Create a new service instance.
+     */
+    public function __construct(private readonly FlowgateLogger $logger) {}
+
+    /**
      * Create and persist a new API key for a project.
      */
     public function createKey(int $projectId, ?int $policyId, string $name, ?string $expiresAt = null): ApiKeySecretData
@@ -28,6 +33,12 @@ class ApiKeyService
             'key_hash' => hash('sha256', $plain),
             'status' => 'active',
             'expires_at' => $expiresAt ? CarbonImmutable::parse($expiresAt) : null,
+        ]);
+
+        $this->logger->info('api_key.created', [
+            'api_key_id' => $apiKey->id,
+            'project_id' => $projectId,
+            'policy_id' => $policyId,
         ]);
 
         return new ApiKeySecretData($apiKey, $plain);
@@ -47,6 +58,11 @@ class ApiKeyService
             'status' => 'active',
             'revoked_at' => null,
         ])->save();
+
+        $this->logger->info('api_key.rotated', [
+            'api_key_id' => $apiKey->id,
+            'project_id' => $apiKey->project_id,
+        ]);
 
         return new ApiKeySecretData($apiKey->fresh(), $plain);
     }

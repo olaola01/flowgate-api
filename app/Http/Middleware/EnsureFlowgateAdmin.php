@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Flowgate\FlowgateLogger;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -11,6 +12,11 @@ use Illuminate\Http\Request;
 class EnsureFlowgateAdmin
 {
     /**
+     * Create a new middleware instance.
+     */
+    public function __construct(private readonly FlowgateLogger $logger) {}
+
+    /**
      * Validate the admin header token before allowing access.
      */
     public function handle(Request $request, Closure $next)
@@ -19,6 +25,10 @@ class EnsureFlowgateAdmin
         $expected = config('flowgate.admin_token');
 
         if (! is_string($provided) || ! is_string($expected) || ! hash_equals($expected, $provided)) {
+            $this->logger->warning('admin.auth.failed', [
+                'reason' => 'invalid_or_missing_admin_token',
+            ]);
+
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 

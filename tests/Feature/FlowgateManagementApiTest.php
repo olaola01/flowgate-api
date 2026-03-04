@@ -9,6 +9,7 @@ uses(RefreshDatabase::class);
 beforeEach(function (): void {
     config()->set('flowgate.admin_token', 'test-admin-token');
     config()->set('flowgate.analytics_cache_store', 'array');
+    config()->set('flowgate.rate_limit_store', 'array');
 });
 
 it('requires admin token for management endpoints', function (): void {
@@ -80,4 +81,43 @@ it('returns aggregated analytics payloads', function (): void {
         ->assertOk()
         ->assertJsonPath('data.0.route', '/api/g/primary-api/customers')
         ->assertJsonPath('data.0.total_requests', 100);
+});
+
+it('replays mutating management requests with idempotency keys', function (): void {
+    $payload = [
+        'name' => 'Idempotent Project',
+        'slug' => 'idempotent-project',
+        'upstream_base_url' => 'https://api.example.com',
+        'is_active' => true,
+    ];
+
+    $first = $this->withHeaders([
+        'X-Admin-Token' => 'test-admin-token',
+        'Idempotency-Key' => 'idem-project-create-1',
+    ])->postJson('/api/v1/projects', $payload)->assertCreated();
+
+    $second = $this->withHeaders([
+        'X-Admin-Token' => 'test-admin-token',
+        'Idempotency-Key' => 'idem-project-create-1',
+    ])->postJson('/api/v1/projects', $payload)->assertCreated();
+
+    expect(Project::query()->where('slug', 'idempotent-project')->count())->toBe(1);
+    expect($first->json('data.id'))->toBe($second->json('data.id'));
+    $second->assertHeader('X-Idempotency-Status', 'replayed');
+});
+
+it('adds and propagates correlation ids in API responses', function (): void {
+    $generated = $this->withHeader('X-Admin-Token', 'test-admin-token')
+        ->getJson('/api/v1/projects')
+        ->assertOk();
+
+    expect($generated->headers->get('X-Request-Id'))->not->toBeNull();
+
+    $providedId = 'corr-test-id-123';
+    $echoed = $this->withHeaders([
+        'X-Admin-Token' => 'test-admin-token',
+        'X-Request-Id' => $providedId,
+    ])->getJson('/api/v1/projects')->assertOk();
+
+    $echoed->assertHeader('X-Request-Id', $providedId);
 });

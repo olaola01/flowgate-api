@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Services\Flowgate\ApiKeyService;
+use App\Services\Flowgate\FlowgateLogger;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,10 @@ class EnsureGatewayApiKey
     /**
      * Create a new middleware instance.
      */
-    public function __construct(private readonly ApiKeyService $apiKeyService) {}
+    public function __construct(
+        private readonly ApiKeyService $apiKeyService,
+        private readonly FlowgateLogger $logger,
+    ) {}
 
     /**
      * Ensure an active API key exists for the requested project.
@@ -25,12 +29,21 @@ class EnsureGatewayApiKey
             ?? $request->bearerToken();
 
         if (! is_string($token) || $token === '') {
+            $this->logger->warning('gateway.auth.failed', [
+                'reason' => 'missing_api_key',
+            ]);
+
             return response()->json(['message' => 'API key is required'], 401);
         }
 
         $apiKey = $this->apiKeyService->resolveActiveKey($token, $request->route('project')->id);
 
         if ($apiKey === null) {
+            $this->logger->warning('gateway.auth.failed', [
+                'reason' => 'invalid_api_key',
+                'token_prefix' => substr($token, 0, 8),
+            ]);
+
             return response()->json(['message' => 'Invalid API key'], 401);
         }
 
