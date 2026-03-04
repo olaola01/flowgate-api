@@ -51,26 +51,42 @@ Most API projects stop at CRUD. Flowgate adds the operational layer teams actual
 
 ## Repository Structure
 
+```text
 app/
+├── Actions/Fortify/                # auth actions
+├── Concerns/                       # shared validation traits
+├── Console/Commands/               # scheduled command entrypoints
+├── Data/Flowgate/                  # DTOs
 ├── Http/
-│   ├── Controllers
-│   ├── Middleware
-│   └── Requests
-├── Services
-├── DTOs
-├── Jobs
-└── Policies
+│   ├── Controllers/Api/            # Flowgate API endpoints
+│   ├── Integrations/Flowgate/      # Saloon connector + requests
+│   ├── Middleware/                 # admin key + gateway controls
+│   ├── Requests/Api/               # Form Request validation
+│   └── Resources/Flowgate/         # JsonResource transformers
+├── Jobs/Flowgate/                  # async aggregation/log jobs
+├── Models/Flowgate/                # domain models
+├── Providers/                      # app + Fortify providers
+└── Services/Flowgate/              # domain services
+
+config/
+├── flowgate.php
+└── scribe.php
 
 database/
-├── migrations
-└── seeders
-
-tests/
-├── Feature
-└── Unit
+├── migrations/
+└── seeders/
 
 docs/
 └── architecture.md
+
+routes/
+├── api.php
+└── console.php
+
+tests/
+├── Feature/
+└── Unit/
+```
 
 High-level flow:
 

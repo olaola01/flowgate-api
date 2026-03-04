@@ -6,31 +6,31 @@ Flowgate is built around a thin API gateway path and asynchronous analytics proc
 
 ```mermaid
 flowchart LR
-    Client[Client / SDK] -->|X-Api-Key Request| Gateway[Laravel Gateway Route]
-    Gateway --> Auth[API Key Middleware]
-    Auth --> Limit[Rate Limit Middleware (Redis)]
-    Limit -->|Allowed| Proxy[Saloon Upstream Proxy]
-    Limit -->|Blocked 429| LogBlocked[Telemetry Logger]
+    Client["Client SDK"] -->|X-Api-Key Request| Gateway["Laravel Gateway Route"]
+    Gateway --> Auth["API Key Middleware"]
+    Auth --> Limit["Rate Limit Middleware Redis"]
+    Limit -->|Allowed| Proxy["Saloon Upstream Proxy"]
+    Limit -->|Blocked 429| LogBlocked["Telemetry Logger"]
 
-    Proxy --> Upstream[Customer Upstream API]
+    Proxy --> Upstream["Customer Upstream API"]
     Upstream --> Proxy
-    Proxy --> LogAllowed[Telemetry Logger]
+    Proxy --> LogAllowed["Telemetry Logger"]
 
     LogAllowed --> RawLogs[(request_logs)]
     LogBlocked --> RawLogs
 
-    RawLogs --> HourlyJob[AggregateUsageHourlyJob]
+    RawLogs --> HourlyJob["AggregateUsageHourlyJob"]
     HourlyJob --> Hourly[(usage_aggregates_hourly)]
-    Hourly --> DailyJob[AggregateUsageDailyJob]
+    Hourly --> DailyJob["AggregateUsageDailyJob"]
     DailyJob --> Daily[(usage_aggregates_daily)]
 
-    Daily --> AnalyticsSvc[AnalyticsService]
+    Daily --> AnalyticsSvc["AnalyticsService"]
     Hourly --> AnalyticsSvc
     AnalyticsSvc --> RedisCache[(Redis cache)]
-    AnalyticsSvc --> AdminAPI[Analytics Endpoints]
+    AnalyticsSvc --> AdminAPI["Analytics Endpoints"]
 
-    AdminUser[Admin Client] -->|X-Admin-Token| AdminAPI
-    AdminUser -->|X-Admin-Token| MgmtAPI[Projects/Policies/Keys Endpoints]
+    AdminUser["Admin Client"] -->|X-Admin-Token| AdminAPI
+    AdminUser -->|X-Admin-Token| MgmtAPI["Projects and Keys Endpoints"]
     MgmtAPI --> MySQL[(MySQL/PostgreSQL)]
     RawLogs --> MySQL
     Hourly --> MySQL
