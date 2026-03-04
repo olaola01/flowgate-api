@@ -14,6 +14,11 @@ use Illuminate\Http\Request;
 class GatewayTelemetryService
 {
     /**
+     * Create a new service instance.
+     */
+    public function __construct(private readonly FlowgateLogger $logger) {}
+
+    /**
      * Log an allowed upstream request.
      */
     public function logAllowed(
@@ -32,6 +37,12 @@ class GatewayTelemetryService
 
         $log = RequestLog::query()->create($payload);
         ProcessRequestLogJob::dispatch($log->id);
+        $this->logger->info('gateway.telemetry.logged', [
+            'request_log_id' => $log->id,
+            'api_key_id' => $apiKey->id,
+            'status_code' => $statusCode,
+            'rate_limited' => false,
+        ]);
     }
 
     /**
@@ -47,6 +58,12 @@ class GatewayTelemetryService
 
         $log = RequestLog::query()->create($payload);
         ProcessRequestLogJob::dispatch($log->id);
+        $this->logger->warning('gateway.telemetry.logged', [
+            'request_log_id' => $log->id,
+            'api_key_id' => $apiKey->id,
+            'status_code' => $statusCode,
+            'rate_limited' => true,
+        ]);
     }
 
     /**

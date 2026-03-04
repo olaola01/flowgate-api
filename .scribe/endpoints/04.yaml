@@ -23,6 +23,7 @@ endpoints:
       deprecated: false
     headers:
       X-Api-Key: 'string required API key used for gateway authentication.'
+      X-Request-Id: 'string Optional correlation ID. If omitted, one is generated.'
       Content-Type: application/json
       Accept: application/json
     urlParameters:

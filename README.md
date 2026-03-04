@@ -111,6 +111,7 @@ High-level flow:
 - Rotate keys (returns new plaintext once)
 - Revoke keys
 - Hash-only key storage at rest
+- Idempotency-key support for mutating management requests (`Idempotency-Key`)
 
 ### 3) Rate Limiting
 
@@ -126,6 +127,7 @@ High-level flow:
 - Any HTTP method forwarding via Saloon connector/request
 - Safe header forwarding
 - Handles upstream failures cleanly
+- Request correlation IDs on every API response (`X-Request-Id`)
 
 ### 5) Telemetry + Analytics
 
@@ -232,6 +234,13 @@ Environment variables:
 - Plaintext key is returned only on creation/rotation.
 - Management endpoints are protected by admin token middleware.
 - Gateway strips sensitive inbound headers before upstream forwarding.
+- Mutating management operations can be safely retried via idempotency keys.
+
+## Observability
+
+- Structured JSON logs are written to `storage/logs/flowgate.log`.
+- Logs include stable event names (`gateway.proxy.succeeded`, `idempotency.replayed`, etc.).
+- Correlation IDs are propagated via `X-Request-Id` and attached to log context.
 
 ## Testing Coverage
 

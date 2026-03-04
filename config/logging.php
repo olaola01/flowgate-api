@@ -73,6 +73,15 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'flowgate' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/flowgate.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => env('LOG_DAILY_DAYS', 14),
+            'replace_placeholders' => true,
+            'tap' => [\App\Logging\UseJsonFormatter::class],
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

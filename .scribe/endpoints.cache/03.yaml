@@ -20,6 +20,7 @@ endpoints:
       deprecated: false
     headers:
       X-Admin-Token: 'string required Admin token for Flowgate management endpoints.'
+      X-Request-Id: 'string Optional correlation ID. If omitted, one is generated.'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -88,6 +89,7 @@ endpoints:
       deprecated: false
     headers:
       X-Admin-Token: 'string required Admin token for Flowgate management endpoints.'
+      X-Request-Id: 'string Optional correlation ID. If omitted, one is generated.'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -156,6 +158,7 @@ endpoints:
       deprecated: false
     headers:
       X-Admin-Token: 'string required Admin token for Flowgate management endpoints.'
+      X-Request-Id: 'string Optional correlation ID. If omitted, one is generated.'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []

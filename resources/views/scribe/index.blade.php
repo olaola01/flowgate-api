@@ -186,6 +186,7 @@ Authentication model:
     <pre><code class="language-bash">curl --request GET \
     --get "http://localhost:8000/api/v1/keys?project_id=1&amp;per_page=20" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -204,6 +205,7 @@ Object.keys(params)
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -278,6 +280,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="GETapi-v1-keys"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
@@ -343,6 +357,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request POST \
     "http://localhost:8000/api/v1/keys" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
+    --header "Idempotency-Key: string Optional idempotency key for safe retries." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -361,6 +377,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
+    "Idempotency-Key": "string Optional idempotency key for safe retries.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -440,6 +458,30 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="header">
     <br>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="POSTapi-v1-keys"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Idempotency-Key</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Idempotency-Key"                data-endpoint="POSTapi-v1-keys"
+               value="string Optional idempotency key for safe retries."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional idempotency key for safe retries.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
@@ -531,6 +573,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request POST \
     "http://localhost:8000/api/v1/keys/16/rotate" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
+    --header "Idempotency-Key: string Optional idempotency key for safe retries." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -542,6 +586,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
+    "Idempotency-Key": "string Optional idempotency key for safe retries.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -616,6 +662,30 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="POSTapi-v1-keys--apiKey_id--rotate"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Idempotency-Key</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Idempotency-Key"                data-endpoint="POSTapi-v1-keys--apiKey_id--rotate"
+               value="string Optional idempotency key for safe retries."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional idempotency key for safe retries.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
@@ -681,6 +751,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request POST \
     "http://localhost:8000/api/v1/keys/16/revoke" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
+    --header "Idempotency-Key: string Optional idempotency key for safe retries." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -692,6 +764,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
+    "Idempotency-Key": "string Optional idempotency key for safe retries.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -766,6 +840,30 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="POSTapi-v1-keys--apiKey_id--revoke"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Idempotency-Key</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Idempotency-Key"                data-endpoint="POSTapi-v1-keys--apiKey_id--revoke"
+               value="string Optional idempotency key for safe retries."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional idempotency key for safe retries.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
@@ -835,6 +933,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request GET \
     --get "http://localhost:8000/api/v1/analytics/overview?from=2026-03-03+00%3A00%3A00&amp;to=2026-03-04+00%3A00%3A00&amp;project_id=1" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -854,6 +953,7 @@ Object.keys(params)
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -926,6 +1026,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="header">
     <br>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="GETapi-v1-analytics-overview"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
@@ -1005,6 +1117,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request GET \
     --get "http://localhost:8000/api/v1/analytics/timeseries?from=2026-03-03+00%3A00%3A00&amp;to=2026-03-04+00%3A00%3A00&amp;project_id=1" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -1024,6 +1137,7 @@ Object.keys(params)
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -1096,6 +1210,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="header">
     <br>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="GETapi-v1-analytics-timeseries"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
@@ -1175,6 +1301,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request GET \
     --get "http://localhost:8000/api/v1/analytics/endpoints/top?from=2026-03-03+00%3A00%3A00&amp;to=2026-03-04+00%3A00%3A00&amp;project_id=1&amp;limit=10" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -1195,6 +1322,7 @@ Object.keys(params)
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -1267,6 +1395,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="header">
     <br>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="GETapi-v1-analytics-endpoints-top"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
@@ -1362,6 +1502,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request GET \
     --get "http://localhost:8000/api/g/architecto/customers" \
     --header "X-Api-Key: string required API key used for gateway authentication." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -1373,6 +1514,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 const headers = {
     "X-Api-Key": "string required API key used for gateway authentication.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -1467,6 +1609,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>string required API key used for gateway authentication.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="GETapi-g--project_slug---path--"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
@@ -1548,6 +1702,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request GET \
     --get "http://localhost:8000/api/v1/policies?page=1&amp;per_page=20" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -1566,6 +1721,7 @@ Object.keys(params)
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -1640,6 +1796,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="GETapi-v1-policies"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
@@ -1705,6 +1873,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request POST \
     "http://localhost:8000/api/v1/policies" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
+    --header "Idempotency-Key: string Optional idempotency key for safe retries." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1725,6 +1895,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
+    "Idempotency-Key": "string Optional idempotency key for safe retries.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -1806,6 +1978,30 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="header">
     <br>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="POSTapi-v1-policies"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Idempotency-Key</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Idempotency-Key"                data-endpoint="POSTapi-v1-policies"
+               value="string Optional idempotency key for safe retries."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional idempotency key for safe retries.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
@@ -1935,6 +2131,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request GET \
     --get "http://localhost:8000/api/v1/projects?page=1&amp;per_page=20" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -1953,6 +2150,7 @@ Object.keys(params)
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -2027,6 +2225,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="GETapi-v1-projects"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
 &nbsp;
  &nbsp;
@@ -2092,6 +2302,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request POST \
     "http://localhost:8000/api/v1/projects" \
     --header "X-Admin-Token: string required Admin token for Flowgate management endpoints." \
+    --header "X-Request-Id: string Optional correlation ID. If omitted, one is generated." \
+    --header "Idempotency-Key: string Optional idempotency key for safe retries." \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -2110,6 +2322,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 const headers = {
     "X-Admin-Token": "string required Admin token for Flowgate management endpoints.",
+    "X-Request-Id": "string Optional correlation ID. If omitted, one is generated.",
+    "Idempotency-Key": "string Optional idempotency key for safe retries.",
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
@@ -2189,6 +2403,30 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="header">
     <br>
 <p>Example: <code>string required Admin token for Flowgate management endpoints.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>X-Request-Id</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="X-Request-Id"                data-endpoint="POSTapi-v1-projects"
+               value="string Optional correlation ID. If omitted, one is generated."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional correlation ID. If omitted, one is generated.</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Idempotency-Key</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Idempotency-Key"                data-endpoint="POSTapi-v1-projects"
+               value="string Optional idempotency key for safe retries."
+               data-component="header">
+    <br>
+<p>Example: <code>string Optional idempotency key for safe retries.</code></p>
             </div>
                                 <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
