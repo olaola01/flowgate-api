@@ -5,8 +5,14 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
+/**
+ * Guards management endpoints with a static admin token.
+ */
 class EnsureFlowgateAdmin
 {
+    /**
+     * Validate the admin header token before allowing access.
+     */
     public function handle(Request $request, Closure $next)
     {
         $provided = $request->header('X-Admin-Token');

@@ -6,12 +6,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Aggregates hourly metrics into daily metric buckets.
+ */
 class AggregateUsageDailyJob implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * Create a new job instance.
+     */
     public function __construct(public readonly string $bucketDate) {}
 
+    /**
+     * Execute the job.
+     */
     public function handle(): void
     {
         $date = now()->parse($this->bucketDate)->startOfDay();

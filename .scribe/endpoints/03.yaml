@@ -1,0 +1,219 @@
+name: Analytics
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/analytics/overview
+    metadata:
+      custom: []
+      groupName: Analytics
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get overview metrics for a date window.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      X-Admin-Token: 'string required Admin token for Flowgate management endpoints.'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      from:
+        custom: []
+        name: from
+        description: 'datetime Inclusive window start.'
+        required: false
+        example: '2026-03-03 00:00:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      to:
+        custom: []
+        name: to
+        description: 'datetime Inclusive window end.'
+        required: false
+        example: '2026-03-04 00:00:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      project_id:
+        custom: []
+        name: project_id
+        description: 'Filter by project ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanQueryParameters:
+      from: '2026-03-03 00:00:00'
+      to: '2026-03-04 00:00:00'
+      project_id: 1
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/analytics/timeseries
+    metadata:
+      custom: []
+      groupName: Analytics
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get hourly usage points for charting.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      X-Admin-Token: 'string required Admin token for Flowgate management endpoints.'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      from:
+        custom: []
+        name: from
+        description: 'datetime Inclusive window start.'
+        required: false
+        example: '2026-03-03 00:00:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      to:
+        custom: []
+        name: to
+        description: 'datetime Inclusive window end.'
+        required: false
+        example: '2026-03-04 00:00:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      project_id:
+        custom: []
+        name: project_id
+        description: 'Filter by project ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanQueryParameters:
+      from: '2026-03-03 00:00:00'
+      to: '2026-03-04 00:00:00'
+      project_id: 1
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/analytics/endpoints/top
+    metadata:
+      custom: []
+      groupName: Analytics
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get top endpoints by request volume.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      X-Admin-Token: 'string required Admin token for Flowgate management endpoints.'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      from:
+        custom: []
+        name: from
+        description: 'datetime Inclusive window start.'
+        required: false
+        example: '2026-03-03 00:00:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      to:
+        custom: []
+        name: to
+        description: 'datetime Inclusive window end.'
+        required: false
+        example: '2026-03-04 00:00:00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      project_id:
+        custom: []
+        name: project_id
+        description: 'Filter by project ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      limit:
+        custom: []
+        name: limit
+        description: 'Number of endpoints to return.'
+        required: false
+        example: 10
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanQueryParameters:
+      from: '2026-03-03 00:00:00'
+      to: '2026-03-04 00:00:00'
+      project_id: 1
+      limit: 10
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

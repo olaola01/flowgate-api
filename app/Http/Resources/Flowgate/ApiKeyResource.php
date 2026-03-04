@@ -5,9 +5,18 @@ namespace App\Http\Resources\Flowgate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Models\Flowgate\ApiKey */
+/**
+ * Formats API key records for management endpoints.
+ *
+ * @mixin \App\Models\Flowgate\ApiKey
+ */
 class ApiKeyResource extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [

@@ -5,6 +5,9 @@ namespace App\Concerns;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 
+/**
+ * Shared profile validation rules used by forms and actions.
+ */
 trait ProfileValidationRules
 {
     /**

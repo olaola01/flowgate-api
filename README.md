@@ -1,80 +1,126 @@
 # Flowgate
 
-Flowgate is an API Rate Limiting and Analytics Platform built with Laravel.
+Flowgate is a production-style Laravel API gateway project focused on **API key management, rate limiting, telemetry, and analytics**.
 
-Positioning: Stripe + Cloudflare-style API analytics for teams that want API key management, gateway enforcement, request telemetry, and usage insights in one backend.
+It is designed as a portfolio-quality backend that demonstrates practical architecture decisions used in real systems:
 
-## What It Does
+- secure API key lifecycle
+- cache-backed request throttling
+- gateway proxying with Saloon
+- structured request logging
+- asynchronous analytics aggregation
+- generated API documentation with Scribe
 
-- Creates and manages API keys per project
-- Routes API traffic through a gateway endpoint
-- Enforces per-key rate limits using Redis-compatible cache stores
-- Logs request metadata for observability and reporting
-- Aggregates hourly/daily analytics via background jobs
-- Exposes analytics endpoints for dashboards
+## Problem This Solves
 
-## Stack
+Modern SaaS platforms often need an API gateway layer to control and observe API usage.
 
-- Laravel 12 (PHP 8.2+)
-- Saloon v3 (upstream gateway HTTP client)
-- Redis (recommended for rate limiting + analytics cache)
-- MySQL/PostgreSQL/SQLite (local dev supported)
-- Laravel Queues + Scheduler
-- Optional Docker Compose runtime
+Typical challenges include:
 
-## Implemented Features
+• Managing API keys securely  
+• Enforcing per-customer rate limits  
+• Monitoring traffic patterns and errors  
+• Understanding which endpoints drive the most usage  
+• Providing analytics to internal teams or customers
 
-### API Key Management
+Flowgate simulates a lightweight production API gateway that solves these operational problems while demonstrating backend architecture patterns used in real systems.
 
-- Create keys (`POST /api/v1/keys`)
-- List keys (`GET /api/v1/keys`)
-- Rotate keys (`POST /api/v1/keys/{id}/rotate`)
-- Revoke keys (`POST /api/v1/keys/{id}/revoke`)
-- Secure storage: only key hash is persisted; plaintext key is returned once
+## Why This Project
 
-### Gateway + Rate Limiting
+Most API projects stop at CRUD. Flowgate adds the operational layer teams actually need in production:
 
-- Gateway endpoint: `ANY /api/g/{project_slug}/{path?}`
-- API key auth via `X-Api-Key` or Bearer token
-- Policy-driven request-per-minute limits
-- Upstream proxying implemented with Saloon connector/request classes
-- Rate limit headers:
+- Who is calling my API?
+- How much are they using?
+- Are they exceeding limits?
+- Which endpoints are hot/error-prone?
+- Can I expose this data cleanly to customers/internal teams?
+
+## Tech Stack
+
+- **Framework:** Laravel 12
+- **HTTP Integration:** Saloon v3
+- **Cache/Rate limiting:** Redis (recommended)
+- **Database:** MySQL / PostgreSQL / SQLite (dev)
+- **Queue + Scheduling:** Laravel Queue + Scheduler
+- **API Docs:** Laravel Scribe
+- **Testing:** Pest + Laravel test utilities
+
+## Architecture
+
+- Architecture diagram: [docs/architecture.md](docs/architecture.md)
+
+## Repository Structure
+
+app/
+├── Http/
+│   ├── Controllers
+│   ├── Middleware
+│   └── Requests
+├── Services
+├── DTOs
+├── Jobs
+└── Policies
+
+database/
+├── migrations
+└── seeders
+
+tests/
+├── Feature
+└── Unit
+
+docs/
+└── architecture.md
+
+High-level flow:
+
+1. Client request enters gateway (`/api/g/{project}/{path?}`) with API key.
+2. Middleware validates key and enforces rate limits.
+3. Request is proxied to upstream with Saloon.
+4. Telemetry is written to raw logs.
+5. Background jobs aggregate logs to hourly/daily tables.
+6. Analytics endpoints serve cached aggregate metrics.
+
+## Core Features
+
+### 1) Project Management
+
+- Create/list upstream projects
+- Store project slug + upstream base URL
+- Enable/disable project traffic
+
+### 2) API Key Management
+
+- Create/list keys
+- Rotate keys (returns new plaintext once)
+- Revoke keys
+- Hash-only key storage at rest
+
+### 3) Rate Limiting
+
+- Per-key policy-backed throttling
+- Window-based Redis counters
+- Standard response headers:
   - `X-RateLimit-Limit`
   - `X-RateLimit-Remaining`
   - `X-RateLimit-Reset`
 
-### Laravel Best Practices Applied
+### 4) Gateway Proxying
 
-- Form Request classes for request validation
-- Json Resource classes for API response shaping
-- Service classes for business logic and orchestration
-- DTO-style data objects for key secret and proxy response payloads
-- Queue jobs and console commands for async analytics processing
+- Any HTTP method forwarding via Saloon connector/request
+- Safe header forwarding
+- Handles upstream failures cleanly
 
-### Request Logging
+### 5) Telemetry + Analytics
 
-Each gateway request captures:
+- Raw `request_logs` table
+- Hourly aggregates: `usage_aggregates_hourly`
+- Daily aggregates: `usage_aggregates_daily`
+- Overview, timeseries, top-endpoint analytics APIs
 
-- project + api key
-- method + route
-- status code
-- latency
-- request/response bytes
-- client IP + user agent
-- trace/request ID
-- rate-limited flag
+### 6) Async Processing
 
-### Analytics
-
-- Overview metrics (`GET /api/v1/analytics/overview`)
-- Time series (`GET /api/v1/analytics/timeseries`)
-- Top endpoints (`GET /api/v1/analytics/endpoints/top`)
-- Hourly and daily aggregate tables for dashboard performance
-- Cache-backed analytics responses
-
-### Background Workers
-
-Jobs implemented:
+Jobs:
 
 - `ProcessRequestLogJob`
 - `AggregateUsageHourlyJob`
@@ -84,33 +130,52 @@ Jobs implemented:
 
 Scheduled commands:
 
-- `flowgate:aggregate-hourly` every 5 minutes
-- `flowgate:aggregate-daily` daily 00:05
-- `flowgate:expire-logs` daily 00:20
-- `flowgate:warm-cache` every 10 minutes
+- `flowgate:aggregate-hourly` (every 5 min)
+- `flowgate:aggregate-daily` (daily)
+- `flowgate:expire-logs` (daily)
+- `flowgate:warm-cache` (every 10 min)
 
-## Architecture
+## API Surface
 
-1. Client sends request with API key to Flowgate gateway.
-2. API key middleware validates active key for target project.
-3. Rate limit middleware increments/checks counters in cache.
-4. Allowed requests are proxied to the project upstream URL.
-5. Request logs are persisted and post-processed asynchronously.
-6. Aggregation workers roll up usage into hourly/daily buckets.
-7. Analytics API reads aggregates and cache for fast dashboard queries.
+### Management (`/api/v1/*`, requires `X-Admin-Token`)
 
-## Data Model
+- `GET /api/v1/projects`
+- `POST /api/v1/projects`
+- `GET /api/v1/policies`
+- `POST /api/v1/policies`
+- `GET /api/v1/keys`
+- `POST /api/v1/keys`
+- `POST /api/v1/keys/{apiKey}/rotate`
+- `POST /api/v1/keys/{apiKey}/revoke`
+- `GET /api/v1/analytics/overview`
+- `GET /api/v1/analytics/timeseries`
+- `GET /api/v1/analytics/endpoints/top`
 
-Tables added:
+### Gateway
 
-- `projects`
-- `rate_limit_policies`
-- `api_keys`
-- `request_logs`
-- `usage_aggregates_hourly`
-- `usage_aggregates_daily`
+- `ANY /api/g/{project_slug}/{path?}` (requires `X-Api-Key`)
 
-## Local Setup
+## API Documentation (Scribe)
+
+This project uses Scribe for generated docs.
+
+Generate docs:
+
+```bash
+php artisan scribe:generate
+```
+
+Open docs at:
+
+- `/docs` (HTML)
+- `/docs.openapi` (OpenAPI)
+- `/docs.postman` (Postman collection)
+
+Scribe config:
+
+- [config/scribe.php](config/scribe.php)
+
+## Local Development
 
 ```bash
 cp .env.example .env
@@ -118,12 +183,12 @@ composer install
 php artisan key:generate
 php artisan migrate
 php artisan db:seed
-php artisan serve
 ```
 
-Run worker and scheduler in separate terminals:
+Run app + worker + scheduler (separate terminals):
 
 ```bash
+php artisan serve
 php artisan queue:work
 php artisan schedule:work
 ```
@@ -134,9 +199,9 @@ Run tests:
 php artisan test
 ```
 
-## Configuration
+## Flowgate Configuration
 
-`FLOWGATE_*` settings (in `.env`):
+Environment variables:
 
 - `FLOWGATE_ADMIN_TOKEN`
 - `FLOWGATE_DEFAULT_HOURLY_LIMIT`
@@ -145,86 +210,46 @@ php artisan test
 - `FLOWGATE_ANALYTICS_CACHE_TTL_SECONDS`
 - `FLOWGATE_REQUEST_LOG_RETENTION_DAYS`
 
-Admin endpoints require:
+## Security Notes
 
-- Header: `X-Admin-Token: <FLOWGATE_ADMIN_TOKEN>`
+- API keys are stored hashed (`sha256`) and compared safely.
+- Plaintext key is returned only on creation/rotation.
+- Management endpoints are protected by admin token middleware.
+- Gateway strips sensitive inbound headers before upstream forwarding.
 
-## API Quickstart
+## Testing Coverage
 
-Create a project:
+Flowgate feature tests cover:
 
-```bash
-curl -X POST http://127.0.0.1:8000/api/v1/projects \
-  -H "Content-Type: application/json" \
-  -H "X-Admin-Token: change-me" \
-  -d '{
-    "name": "Primary API",
-    "slug": "primary-api",
-    "upstream_base_url": "https://httpbin.org"
-  }'
-```
+- API key creation/rotation
+- rate limit enforcement behavior
+- auth guard behavior on management routes
+- analytics endpoint response structure and aggregation logic
 
-Create a policy:
+See:
 
-```bash
-curl -X POST http://127.0.0.1:8000/api/v1/policies \
-  -H "Content-Type: application/json" \
-  -H "X-Admin-Token: change-me" \
-  -d '{
-    "project_id": 1,
-    "name": "Starter",
-    "requests_per_minute": 60,
-    "requests_per_hour": 1000,
-    "burst_limit": 120
-  }'
-```
+- [tests/Feature/FlowgateApiTest.php](tests/Feature/FlowgateApiTest.php)
+- [tests/Feature/FlowgateManagementApiTest.php](tests/Feature/FlowgateManagementApiTest.php)
 
-Create an API key:
+## Portfolio Highlights
 
-```bash
-curl -X POST http://127.0.0.1:8000/api/v1/keys \
-  -H "Content-Type: application/json" \
-  -H "X-Admin-Token: change-me" \
-  -d '{
-    "project_id": 1,
-    "rate_limit_policy_id": 1,
-    "name": "Server Key"
-  }'
-```
+This project demonstrates:
 
-Call gateway:
+- clean API layering (Request classes + Resource classes)
+- reusable domain services and DTOs
+- async analytics pipeline design
+- practical use of Saloon for external integration
+- generated documentation workflow (Scribe)
+- testable architecture with isolated feature tests
 
-```bash
-curl -X GET "http://127.0.0.1:8000/api/g/primary-api/get" \
-  -H "X-Api-Key: fg_live_..."
-```
+## Future Improvements
 
-## Optional Docker (Example)
-
-Minimal services to include:
-
-- `app` (Laravel PHP runtime)
-- `nginx`
-- `redis`
-- `mysql` or `postgres`
-- `queue-worker`
-
-Then run standard startup + migration commands inside the app container.
-
-## Project Quality Signals
-
-- Feature tests cover key lifecycle and gateway rate limiting
-- Existing auth/settings tests remain passing
-- Clear separation of concerns: middleware, services, jobs, controllers
-- Designed for extension into billing, alerts, RBAC, and multi-tenant plans
-
-## Roadmap
-
-- Sliding window / token bucket algorithms
-- Dashboard frontend (charts + key drilldowns)
-- Webhook alerts for threshold breaches
-- Usage-based billing exports
-- Team/org RBAC and API audit trail UI
+• Distributed rate limiting with sliding window algorithm  
+• Multi-region Redis support  
+• OpenTelemetry tracing integration  
+• Dashboard UI for analytics visualization  
+• Kafka / event streaming for log ingestion  
+• Per-endpoint rate policies
 
 ## License
 

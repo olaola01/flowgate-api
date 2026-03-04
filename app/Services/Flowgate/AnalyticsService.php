@@ -8,8 +8,16 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Computes and caches analytics metrics from aggregate tables.
+ */
 class AnalyticsService
 {
+    /**
+     * Compute headline analytics metrics for the given window.
+     *
+     * @return array{total_requests: int, blocked_requests: int, error_requests: int, error_rate: float, avg_latency_ms: float}
+     */
     public function overview(CarbonImmutable $from, CarbonImmutable $to, ?int $projectId = null): array
     {
         $cacheKey = sprintf('flowgate:analytics:overview:%s:%s:%s', $from->timestamp, $to->timestamp, $projectId ?? 'all');
@@ -42,6 +50,11 @@ class AnalyticsService
         });
     }
 
+    /**
+     * Build a timeseries payload grouped by hourly buckets.
+     *
+     * @return array<int, array{bucket_start: mixed, total_requests: int, blocked_requests: int}>
+     */
     public function timeseries(CarbonImmutable $from, CarbonImmutable $to, ?int $projectId = null): array
     {
         $query = UsageAggregateHourly::query()
@@ -66,6 +79,11 @@ class AnalyticsService
             ->all();
     }
 
+    /**
+     * Return top endpoints by request volume.
+     *
+     * @return array<int, array{route: string, total_requests: int}>
+     */
     public function topEndpoints(CarbonImmutable $from, CarbonImmutable $to, ?int $projectId = null, int $limit = 10): array
     {
         $query = DB::table('usage_aggregates_hourly')
@@ -89,6 +107,9 @@ class AnalyticsService
             ->all();
     }
 
+    /**
+     * Resolve the configured cache store, with graceful fallback.
+     */
     private function store(): Repository
     {
         $configuredStore = (string) config('flowgate.analytics_cache_store', config('cache.default'));

@@ -5,6 +5,9 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
+/**
+ * Configures shared props and asset versioning for Inertia responses.
+ */
 class HandleInertiaRequests extends Middleware
 {
     /**

@@ -7,10 +7,16 @@ use App\Services\Flowgate\AnalyticsService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
+/**
+ * Precomputes overview analytics cache entries for active projects.
+ */
 class WarmAnalyticsCacheJob implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * Execute the job.
+     */
     public function handle(AnalyticsService $analyticsService): void
     {
         $from = now()->subDay()->toImmutable();

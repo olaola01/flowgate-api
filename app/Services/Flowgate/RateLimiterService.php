@@ -7,8 +7,16 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Performs cache-backed rate-limit checks for gateway requests.
+ */
 class RateLimiterService
 {
+    /**
+     * Evaluate and increment counters for the incoming request.
+     *
+     * @return array{allowed: bool, limit: int, remaining: int, reset_at: int}
+     */
     public function checkAndHit(ApiKey $apiKey, Request $request): array
     {
         $policy = $apiKey->policy;
@@ -34,6 +42,9 @@ class RateLimiterService
         ];
     }
 
+    /**
+     * Resolve the configured cache store, with graceful fallback.
+     */
     private function store(): Repository
     {
         $configuredStore = (string) config('flowgate.rate_limit_store', config('cache.default'));

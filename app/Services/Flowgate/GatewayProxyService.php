@@ -11,9 +11,14 @@ use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Response;
 
+/**
+ * Forwards gateway requests to upstream APIs via Saloon.
+ */
 class GatewayProxyService
 {
     /**
+     * Forward an incoming request to the upstream API and normalize the response.
+     *
      * @throws FatalRequestException
      * @throws RequestException
      */
@@ -39,6 +44,11 @@ class GatewayProxyService
         );
     }
 
+    /**
+     * Extract a safe subset of response headers for passthrough.
+     *
+     * @return array<string, string>
+     */
     private function responseHeaders(Response $response): array
     {
         $headers = [];

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Represents an upstream API project configured in Flowgate.
+ */
 class Project extends Model
 {
     use HasFactory;
@@ -21,11 +24,17 @@ class Project extends Model
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Get API keys belonging to the project.
+     */
     public function apiKeys(): HasMany
     {
         return $this->hasMany(ApiKey::class);
     }
 
+    /**
+     * Get rate limit policies belonging to the project.
+     */
     public function policies(): HasMany
     {
         return $this->hasMany(RateLimitPolicy::class);

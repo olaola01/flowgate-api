@@ -8,8 +8,14 @@ use App\Models\Flowgate\Project;
 use App\Models\Flowgate\RequestLog;
 use Illuminate\Http\Request;
 
+/**
+ * Persists gateway telemetry and dispatches post-processing jobs.
+ */
 class GatewayTelemetryService
 {
+    /**
+     * Log an allowed upstream request.
+     */
     public function logAllowed(
         Request $request,
         Project $project,
@@ -28,6 +34,9 @@ class GatewayTelemetryService
         ProcessRequestLogJob::dispatch($log->id);
     }
 
+    /**
+     * Log a blocked request, typically for rate limiting.
+     */
     public function logBlocked(Request $request, ApiKey $apiKey, int $statusCode): void
     {
         $payload = $this->basePayload($request, $apiKey->project, $apiKey);
@@ -40,6 +49,11 @@ class GatewayTelemetryService
         ProcessRequestLogJob::dispatch($log->id);
     }
 
+    /**
+     * Build the baseline telemetry payload from an incoming request.
+     *
+     * @return array<string, int|string|null|\Illuminate\Support\Carbon>
+     */
     private function basePayload(Request $request, Project $project, ApiKey $apiKey): array
     {
         return [

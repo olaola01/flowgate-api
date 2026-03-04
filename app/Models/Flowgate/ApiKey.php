@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Stores hashed API credentials and lifecycle metadata.
+ */
 class ApiKey extends Model
 {
     use HasFactory;
@@ -28,16 +31,25 @@ class ApiKey extends Model
         'revoked_at' => 'datetime',
     ];
 
+    /**
+     * Get the project that owns this key.
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
+    /**
+     * Get the policy assigned to this key.
+     */
     public function policy(): BelongsTo
     {
         return $this->belongsTo(RateLimitPolicy::class, 'rate_limit_policy_id');
     }
 
+    /**
+     * Determine whether the key is currently usable.
+     */
     public function isActive(): bool
     {
         if ($this->status !== 'active' || $this->revoked_at !== null) {

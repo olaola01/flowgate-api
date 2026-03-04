@@ -11,13 +11,29 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
+/**
+ * Proxies incoming requests to upstream APIs after auth and rate-limit checks.
+ */
 class GatewayController extends Controller
 {
+    /**
+     * Build a new controller instance.
+     */
     public function __construct(
         private readonly GatewayTelemetryService $telemetry,
         private readonly GatewayProxyService $proxyService,
     ) {}
 
+    /**
+     * Proxy a gateway request to the project's upstream API.
+     *
+     * @group Gateway
+     *
+     * @header X-Api-Key string required API key used for gateway authentication.
+     *
+     * @urlParam project string required Project slug. Example: primary-api
+     * @urlParam path string Optional upstream path after project slug. Example: customers
+     */
     public function __invoke(Request $request, Project $project, ?string $path = null): Response
     {
         /** @var ApiKey $apiKey */

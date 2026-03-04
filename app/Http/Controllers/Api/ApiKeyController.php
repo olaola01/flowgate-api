@@ -12,10 +12,26 @@ use App\Services\Flowgate\ApiKeyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Handles API key lifecycle endpoints.
+ */
 class ApiKeyController extends Controller
 {
+    /**
+     * Build a new controller instance.
+     */
     public function __construct(private readonly ApiKeyService $apiKeyService) {}
 
+    /**
+     * List API keys with optional project filtering.
+     *
+     * @group API Keys
+     *
+     * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     *
+     * @queryParam project_id integer Filter keys by project ID. Example: 1
+     * @queryParam per_page integer Number of records per page (max 100). Example: 20
+     */
     public function index(IndexApiKeyRequest $request): AnonymousResourceCollection
     {
         $validated = $request->validated();
@@ -30,6 +46,18 @@ class ApiKeyController extends Controller
         return ApiKeyResource::collection($query->paginate($perPage));
     }
 
+    /**
+     * Create a new API key.
+     *
+     * @group API Keys
+     *
+     * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     *
+     * @bodyParam project_id integer required Owning project ID. Example: 1
+     * @bodyParam rate_limit_policy_id integer Optional rate limit policy ID. Example: 1
+     * @bodyParam name string required Friendly key label. Example: Server Key
+     * @bodyParam expires_at datetime Optional expiration timestamp. Example: 2026-12-31 23:59:59
+     */
     public function store(StoreApiKeyRequest $request): JsonResponse
     {
         $payload = $request->validated();
@@ -44,11 +72,20 @@ class ApiKeyController extends Controller
         /** @var ApiKey $apiKey */
         $apiKey = $result->apiKey;
 
-        return (new ApiKeyWithSecretResource($apiKey->loadMissing(['project', 'policy']), $result->plainKey))
+        return new ApiKeyWithSecretResource($apiKey->loadMissing(['project', 'policy']), $result->plainKey)
             ->response()
             ->setStatusCode(201);
     }
 
+    /**
+     * Rotate an API key and return the new plaintext secret.
+     *
+     * @group API Keys
+     *
+     * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     *
+     * @urlParam apiKey integer required API key ID. Example: 1
+     */
     public function rotate(ApiKey $apiKey): JsonResponse
     {
         $result = $this->apiKeyService->rotateKey($apiKey);
@@ -56,10 +93,19 @@ class ApiKeyController extends Controller
         /** @var ApiKey $rotated */
         $rotated = $result->apiKey;
 
-        return (new ApiKeyWithSecretResource($rotated->loadMissing(['project', 'policy']), $result->plainKey))
+        return new ApiKeyWithSecretResource($rotated->loadMissing(['project', 'policy']), $result->plainKey)
             ->response();
     }
 
+    /**
+     * Revoke an API key.
+     *
+     * @group API Keys
+     *
+     * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     *
+     * @urlParam apiKey integer required API key ID. Example: 1
+     */
     public function revoke(ApiKey $apiKey): JsonResponse
     {
         $apiKey->forceFill([

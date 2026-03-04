@@ -12,10 +12,27 @@ use App\Services\Flowgate\AnalyticsService;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Serves aggregated analytics endpoints for Flowgate.
+ */
 class AnalyticsController extends Controller
 {
+    /**
+     * Build a new controller instance.
+     */
     public function __construct(private readonly AnalyticsService $analytics) {}
 
+    /**
+     * Get overview metrics for a date window.
+     *
+     * @group Analytics
+     *
+     * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     *
+     * @queryParam from datetime Inclusive window start. Example: 2026-03-03 00:00:00
+     * @queryParam to datetime Inclusive window end. Example: 2026-03-04 00:00:00
+     * @queryParam project_id integer Filter by project ID. Example: 1
+     */
     public function overview(AnalyticsOverviewRequest $request): AnalyticsOverviewResource
     {
         [$from, $to, $projectId] = $this->resolvedWindow($request->validated());
@@ -23,6 +40,17 @@ class AnalyticsController extends Controller
         return AnalyticsOverviewResource::make($this->analytics->overview($from, $to, $projectId));
     }
 
+    /**
+     * Get hourly usage points for charting.
+     *
+     * @group Analytics
+     *
+     * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     *
+     * @queryParam from datetime Inclusive window start. Example: 2026-03-03 00:00:00
+     * @queryParam to datetime Inclusive window end. Example: 2026-03-04 00:00:00
+     * @queryParam project_id integer Filter by project ID. Example: 1
+     */
     public function timeseries(AnalyticsOverviewRequest $request): AnonymousResourceCollection
     {
         [$from, $to, $projectId] = $this->resolvedWindow($request->validated());
@@ -32,6 +60,18 @@ class AnalyticsController extends Controller
         );
     }
 
+    /**
+     * Get top endpoints by request volume.
+     *
+     * @group Analytics
+     *
+     * @header X-Admin-Token string required Admin token for Flowgate management endpoints.
+     *
+     * @queryParam from datetime Inclusive window start. Example: 2026-03-03 00:00:00
+     * @queryParam to datetime Inclusive window end. Example: 2026-03-04 00:00:00
+     * @queryParam project_id integer Filter by project ID. Example: 1
+     * @queryParam limit integer Number of endpoints to return. Example: 10
+     */
     public function topEndpoints(AnalyticsTopEndpointsRequest $request): AnonymousResourceCollection
     {
         $validated = $request->validated();
@@ -43,6 +83,12 @@ class AnalyticsController extends Controller
         );
     }
 
+    /**
+     * Resolve the analytics window and optional project scope.
+     *
+     * @param  array<string, mixed>  $validated
+     * @return array{0: CarbonImmutable, 1: CarbonImmutable, 2: int|null}
+     */
     private function resolvedWindow(array $validated): array
     {
         $from = isset($validated['from'])

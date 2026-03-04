@@ -7,13 +7,22 @@ use App\Services\Flowgate\RateLimiterService;
 use Closure;
 use Illuminate\Http\Request;
 
+/**
+ * Applies rate limiting to gateway traffic based on API key policy.
+ */
 class EnforceFlowgateRateLimit
 {
+    /**
+     * Create a new middleware instance.
+     */
     public function __construct(
         private readonly RateLimiterService $rateLimiterService,
         private readonly GatewayTelemetryService $telemetryService,
     ) {}
 
+    /**
+     * Validate limit quota and decorate responses with rate limit headers.
+     */
     public function handle(Request $request, Closure $next)
     {
         $apiKey = $request->attributes->get('flowgate_api_key');

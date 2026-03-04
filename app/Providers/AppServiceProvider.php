@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * Registers global application defaults and framework-level behaviors.
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**

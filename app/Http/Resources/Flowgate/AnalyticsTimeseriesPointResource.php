@@ -5,8 +5,16 @@ namespace App\Http\Resources\Flowgate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Formats a single timeseries analytics point.
+ */
 class AnalyticsTimeseriesPointResource extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, int|string|null>
+     */
     public function toArray(Request $request): array
     {
         return [

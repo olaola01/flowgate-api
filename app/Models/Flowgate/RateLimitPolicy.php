@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Defines per-window request limits for API keys.
+ */
 class RateLimitPolicy extends Model
 {
     use HasFactory;
@@ -23,6 +26,9 @@ class RateLimitPolicy extends Model
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Get the project this policy belongs to.
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);

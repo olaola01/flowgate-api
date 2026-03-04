@@ -7,8 +7,14 @@ use App\Models\Flowgate\ApiKey;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
 
+/**
+ * Handles API key generation, rotation, and verification.
+ */
 class ApiKeyService
 {
+    /**
+     * Create and persist a new API key for a project.
+     */
     public function createKey(int $projectId, ?int $policyId, string $name, ?string $expiresAt = null): ApiKeySecretData
     {
         $plain = 'fg_live_'.Str::random(48);
@@ -27,6 +33,9 @@ class ApiKeyService
         return new ApiKeySecretData($apiKey, $plain);
     }
 
+    /**
+     * Rotate an existing API key and return the new secret.
+     */
     public function rotateKey(ApiKey $apiKey): ApiKeySecretData
     {
         $plain = 'fg_live_'.Str::random(48);
@@ -42,6 +51,9 @@ class ApiKeyService
         return new ApiKeySecretData($apiKey->fresh(), $plain);
     }
 
+    /**
+     * Resolve an active API key for a token and project.
+     */
     public function resolveActiveKey(string $token, int $projectId): ?ApiKey
     {
         $prefix = substr($token, 0, 16);

@@ -6,6 +6,9 @@ use App\Concerns\PasswordValidationRules;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Validates account deletion requests.
+ */
 class ProfileDeleteRequest extends FormRequest
 {
     use PasswordValidationRules;

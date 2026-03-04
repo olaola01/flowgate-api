@@ -5,6 +5,9 @@ namespace App\Models\Flowgate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Stores daily aggregated request metrics.
+ */
 class UsageAggregateDaily extends Model
 {
     use HasFactory;

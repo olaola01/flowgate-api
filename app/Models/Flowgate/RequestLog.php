@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Captures individual gateway request telemetry events.
+ */
 class RequestLog extends Model
 {
     use HasFactory;
@@ -31,11 +34,17 @@ class RequestLog extends Model
         'created_at' => 'datetime',
     ];
 
+    /**
+     * Get the project associated with this request.
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
+    /**
+     * Get the API key associated with this request.
+     */
     public function apiKey(): BelongsTo
     {
         return $this->belongsTo(ApiKey::class);
