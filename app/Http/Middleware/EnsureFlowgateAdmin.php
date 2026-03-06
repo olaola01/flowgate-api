@@ -9,12 +9,12 @@ use Illuminate\Http\Request;
 /**
  * Guards management endpoints with a static admin token.
  */
-class EnsureFlowgateAdmin
+readonly class EnsureFlowgateAdmin
 {
     /**
      * Create a new middleware instance.
      */
-    public function __construct(private readonly FlowgateLogger $logger) {}
+    public function __construct(private FlowgateLogger $logger) {}
 
     /**
      * Validate the admin header token before allowing access.

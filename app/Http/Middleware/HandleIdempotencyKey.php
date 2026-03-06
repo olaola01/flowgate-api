@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Cache;
 /**
  * Replays responses for repeated mutating requests with the same idempotency key.
  */
-class HandleIdempotencyKey
+readonly class HandleIdempotencyKey
 {
     /**
      * Create a new middleware instance.
      */
-    public function __construct(private readonly FlowgateLogger $logger) {}
+    public function __construct(private FlowgateLogger $logger) {}
 
     /**
      * Handle idempotency key lookups and writes.

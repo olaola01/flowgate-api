@@ -11,15 +11,15 @@ use Illuminate\Http\Request;
 /**
  * Applies rate limiting to gateway traffic based on API key policy.
  */
-class EnforceFlowgateRateLimit
+readonly class EnforceFlowgateRateLimit
 {
     /**
      * Create a new middleware instance.
      */
     public function __construct(
-        private readonly RateLimiterService $rateLimiterService,
-        private readonly GatewayTelemetryService $telemetryService,
-        private readonly FlowgateLogger $logger,
+        private RateLimiterService      $rateLimiterService,
+        private GatewayTelemetryService $telemetryService,
+        private FlowgateLogger          $logger,
     ) {}
 
     /**

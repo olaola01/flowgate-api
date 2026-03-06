@@ -10,14 +10,14 @@ use Illuminate\Http\Request;
 /**
  * Resolves and validates the API key attached to gateway traffic.
  */
-class EnsureGatewayApiKey
+readonly class EnsureGatewayApiKey
 {
     /**
      * Create a new middleware instance.
      */
     public function __construct(
-        private readonly ApiKeyService $apiKeyService,
-        private readonly FlowgateLogger $logger,
+        private ApiKeyService  $apiKeyService,
+        private FlowgateLogger $logger,
     ) {}
 
     /**

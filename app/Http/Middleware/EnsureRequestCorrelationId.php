@@ -10,12 +10,12 @@ use Illuminate\Support\Str;
 /**
  * Ensures each API request has a correlation ID and exposes it in responses.
  */
-class EnsureRequestCorrelationId
+readonly class EnsureRequestCorrelationId
 {
     /**
      * Create a new middleware instance.
      */
-    public function __construct(private readonly FlowgateLogger $logger) {}
+    public function __construct(private FlowgateLogger $logger) {}
 
     /**
      * Attach correlation ID to request context and response headers.
